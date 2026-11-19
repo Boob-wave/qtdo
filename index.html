@@ -149,207 +149,201 @@
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <main class="panel">
-      <div id="content">
-        <h1>Ê ông ơi! 💖</h1>
-        <p class="muted">Chào mừng đến với góc ảnh của tôi.</p>
-        <div id="gallery" class="grid"></div>
-        <p id="galleryStatus" class="small muted">Đang tải ảnh...</p>
+<div class="wrap">
+  <main class="panel">
+    <div id="content">
+      <h1>Ê ông ơi! 💖</h1>
+      <p class="muted">Chào mừng đến với góc ảnh của tôi.</p>
+      <div id="gallery" class="grid"></div>
+      <p id="galleryStatus" class="small muted">Đang tải ảnh...</p>
 
-        <div class="owner-box">
-          <strong>📸 Chọn ảnh kỷ niệm (Chế độ Web Tĩnh)</strong>
-          <p class="small muted mb-2">Bạn có thể chọn ảnh từ máy để xem thử ngay, hoặc cấu hình danh sách ảnh mặc định trong code để up lên GitHub Pages.</p>
-          <div class="owner-row">
-            <label class="upload-label primary" for="photos">📸 Chọn ảnh từ máy</label>
-            <input id="photos" type="file" accept="image/jpeg,image/png,image/gif,image/webp" multiple>
-            <button class="btn-funny" id="clearPhotos" hidden>🗑️ Xóa ảnh chọn tạm</button>
-          </div>
-          <div id="ownerStatus" class="status small" aria-live="polite"></div>
+      <div class="owner-box">
+        <strong>📸 Chọn ảnh kỷ niệm (Chế độ Web Tĩnh)</strong>
+        <p class="small muted mb-2">Bạn có thể chọn ảnh từ máy để xem thử ngay, hoặc dùng danh sách mặc định trong code.</p>
+        <div class="owner-row">
+          <label class="upload-label primary" for="photos">📁 Chọn ảnh từ máy</label>
+          <input id="photos" type="file" accept="image/jpeg,image/png,image/gif,image/webp" multiple>
+          <button class="btn-funny" id="clearPhotos" hidden>🗑️ Xóa ảnh chọn tạm</button>
         </div>
-
-        <button class="btn-funny primary" id="start" disabled>Bắt đầu ✨</button>
+        <div id="ownerStatus" class="status small"></div>
       </div>
-    </main>
-  </div>
 
-  <script src="js/bootstrap.bundle.min.js"></script>
-  <script>
-    const content = document.getElementById('content');
-    const gallery = document.getElementById('gallery');
-    const galleryStatus = document.getElementById('galleryStatus');
-    const startBtn = document.getElementById('start');
-    const clearBtn = document.getElementById('clearPhotos');
-    const ownerStatus = document.getElementById('ownerStatus');
+      <button class="btn-funny primary" id="start" disabled>Bắt đầu ✨</button>
+    </div>
+  </main>
+</div>
 
-    // =========================================================================
-    // HƯỚNG DẪN UP LÊN GITHUB PAGES:
-    // 1. Bỏ các file ảnh của bạn vào thư mục "images/" (ví dụ: images/anh1.jpg)
-    // 2. Điền tên đường dẫn các ảnh đó vào mảng DEFAULT_PHOTOS bên dưới:
-    // =========================================================================
-    const DEFAULT_PHOTOS = [
-    // Ví dụ cấu hình danh sách ảnh mặc định từ thư mục images của bạn:
-    const defaultImages = [
-      "images/DSC_0107.jpeg",
-      "images/DSC_0113.jpeg",
-      "images/DSC_0313.jpeg",
-      "images/F162C6D0-818F-433E-BA9C-4F3C4D961E74.png",
-      "images/IMG_0476.JPG",
-      "images/IMG_0608.jpg",
-      "images/IMG_0614.jpg",
-      "images/IMG_0669.jpg",
-      "images/IMG_0670.jpg",
-      "images/IMG_1015.jpg",
-      "images/IMG_1094.JPG",
-      "images/IMG_6441.jpg"
-    ];
+<script src="js/bootstrap.bundle.min.js"></script>
+<script>
+  const content = document.getElementById('content');
+  const gallery = document.getElementById('gallery');
+  const galleryStatus = document.getElementById('galleryStatus');
+  const startBtn = document.getElementById('start');
+  const clearBtn = document.getElementById('clearPhotos');
+  const ownerStatus = document.getElementById('ownerStatus');
 
-    let photoUrls = [...DEFAULT_PHOTOS];
+  // Danh sách ảnh mặc định từ thư mục images của bạn
+  const DEFAULT_PHOTOS = [
+    "images/DSC_0107.jpeg",
+    "images/DSC_0113.jpeg",
+    "images/DSC_0313.jpeg",
+    "images/F162C6D0-818F-433E-BA9C-4F3C4D961E74.png",
+    "images/IMG_0476.JPG",
+    "images/IMG_0608.jpg",
+    "images/IMG_0614.jpg",
+    "images/IMG_0669.jpg",
+    "images/IMG_0670.jpg",
+    "images/IMG_1015.jpg",
+    "images/IMG_1094.JPG",
+    "images/IMG_6441.jpg"
+  ];
 
-    const wishes = [
-      "Chúc ông luôn vui vẻ, khỏe mạnh, tiền vào như nước và lúc nào cũng gặp may mắn! 🍀",
-      "Chúc ông tuổi mới bùng nổ, làm gì cũng thuận lợi, cười thật nhiều và luôn có anh em bên cạnh! 🎉",
-      "Chúc ông ngày càng đẹp trai, giàu có, hạnh phúc — nhớ giữ lời hứa chiếc iPhone nhé! 📱"
-    ];
+  let photoUrls = [...DEFAULT_PHOTOS];
 
-    function renderGallery() {
-      gallery.innerHTML = '';
-      photoUrls.forEach((url, i) => {
-        const im = new Image();
-        im.src = url;
-        im.alt = 'Ảnh kỷ niệm';
-        im.style.animationDelay = (i * 0.18) + 's';
-        im.onerror = () => { im.style.display = 'none'; };
-        gallery.appendChild(im);
-      });
+  const wishes = [
+    "Chúc ông luôn vui vẻ, khỏe mạnh, tiền vào như nước và lúc nào cũng gặp may mắn! 🍀",
+    "Chúc ông tuổi mới bùng nổ, làm gì cũng thuận lợi, cười thật nhiều và luôn có anh em bên cạnh! 🎉",
+    "Chúc ông ngày càng đẹp trai, giàu có, hạnh phúc — nhớ giữ lời hứa chiếc iPhone nhé! 📱"
+  ];
 
-      if (photoUrls.length > 0) {
-        galleryStatus.textContent = `Có ${photoUrls.length} tấm ảnh đang chờ ông khám phá ❤️`;
-        startBtn.disabled = false;
-      } else {
-        galleryStatus.textContent = 'Chưa có ảnh nào. Hãy nhấn "Chọn ảnh từ máy" bên dưới để thêm ảnh chơi ngay nhé!';
-        startBtn.disabled = true;
-      }
-    }
-
-    // Xử lý khi người dùng chọn ảnh trực tiếp từ máy (lưu tạm vào bộ nhớ trình duyệt)
-    document.getElementById('photos').addEventListener('change', (e) => {
-      const files = [...e.target.files];
-      if (!files.length) return;
-
-      const tempUrls = files.map(file => URL.createObjectURL(file));
-      photoUrls = [...photoUrls, ...tempUrls];
-      clearBtn.hidden = false;
-      ownerStatus.textContent = `Đã thêm ${files.length} ảnh thành công!`;
-      renderGallery();
-      e.target.value = '';
+  function renderGallery() {
+    gallery.innerHTML = '';
+    photoUrls.forEach((url, i) => {
+      const im = new Image();
+      im.src = url;
+      im.alt = 'Ảnh kỷ niệm';
+      im.style.animationDelay = (i * 0.18) + 's';
+      im.onerror = () => { im.style.display = 'none'; };
+      gallery.appendChild(im);
     });
 
-    clearBtn.onclick = () => {
-      photoUrls = [...DEFAULT_PHOTOS];
-      clearBtn.hidden = true;
-      ownerStatus.textContent = 'Đã xóa ảnh chọn tạm.';
-      renderGallery();
-    };
-
-    startBtn.onclick = () => {
-      content.innerHTML = '<h1>Những khoảnh khắc của tôi 📸</h1><p class="muted">Ảnh đang xuất hiện từ từ...</p><div class="grid" id="show"></div><p class="muted">Chạm vào màn hình để tiếp tục nhé 👆</p>';
-      const g = document.getElementById('show');
-      photoUrls.forEach((url, i) => {
-        const im = new Image();
-        im.src = url;
-        im.style.animationDelay = (i * 0.28) + 's';
-        g.appendChild(im);
-      });
-      content.onclick = () => {
-        content.onclick = null;
-        q1();
-      };
-    };
-
-    function dodge(btn) {
-      btn.addEventListener('pointerenter', () => move(btn));
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        move(btn);
-      });
+    if (photoUrls.length > 0) {
+      galleryStatus.textContent = `Có ${photoUrls.length} tấm ảnh đang chờ ông khám phá ❤️`;
+      startBtn.disabled = false;
+    } else {
+      galleryStatus.textContent = 'Chưa có ảnh nào. Hãy nhấn "Chọn ảnh từ máy" bên dưới để thêm ảnh chơi ngay nhé!';
+      startBtn.disabled = true;
     }
+  }
 
-    function move(btn) {
-      btn.style.position = 'fixed';
-      btn.style.left = Math.random() * Math.max(20, innerWidth - 140) + 'px';
-      btn.style.top = Math.random() * Math.max(20, innerHeight - 80) + 'px';
-      btn.style.zIndex = 10;
-    }
+  // Xử lý khi người dùng chọn ảnh trực tiếp từ máy
+  document.getElementById('photos').addEventListener('change', (e) => {
+    const files = [...e.target.files];
+    if (!files.length) return;
 
-    function q1() {
-      content.innerHTML = '<div class="question">Câu 1: Tôi có đẹp trai không? 😎</div><div class="options"><button class="btn-funny primary" id="yes">Có ❤️</button><button class="btn-funny" id="no">Không 🙅</button></div>';
-      dodge(document.getElementById('no'));
-      document.getElementById('yes').onclick = () => {
-        sound();
-        content.innerHTML = '<h1>Tôi cũng biết tôi đẹp trai mà! 😎</h1><p style="font-size:4rem">🗿</p><p>*Âm thanh meme bruhhh* 💀</p><button class="btn-funny primary" id="next">Tiếp tục ➜</button>';
-        document.getElementById('next').onclick = q2;
-      };
-    }
-
-    function q2() {
-      content.innerHTML = '<div class="question">Câu 2: Ông có đẹp trai không? 😏</div><div class="options"><button class="btn-funny primary" id="yes">Có 😎</button><button class="btn-funny" id="no">Không</button></div>';
-      dodge(document.getElementById('no'));
-      document.getElementById('yes').onclick = () => {
-        content.innerHTML = '<h1>Tôi code sai đấy, ông chỉ đẹp trai sau tôi thôi! 🤣</h1><p style="font-size:4rem">👑</p><button class="btn-funny primary" id="next">Câu tiếp theo ➜</button>';
-        document.getElementById('next').onclick = q3;
-      };
-    }
-
-    function q3() {
-      content.innerHTML = '<div class="question">Câu 3: Ông sẽ mua gì tặng tôi? 🎁</div><button class="btn-funny choice primary" id="phone">📱 iPhone 18 Pro Max</button><button class="btn-funny choice" id="money">💸 Chuyển 300 triệu</button><button class="btn-funny choice" id="car">🚗 Xe VF3</button><button class="btn-funny choice" id="poop">💩 Tặng cái cục cứt</button><div class="note" id="note"></div>';
-      const note = document.getElementById('note');
-      ['money', 'car'].forEach(id => {
-        document.getElementById(id).onclick = () => {
-          note.textContent = 'Ông có tiền đâu mà chọn 😂';
-          document.getElementById(id).remove();
-        };
-      });
-      dodge(document.getElementById('poop'));
-      document.getElementById('phone').onclick = finale;
-    }
-
-    function finale() {
-      sound();
-      for (let i = 0; i < 24; i++) {
-        const h = document.createElement('div');
-        h.className = 'heart';
-        h.textContent = ['❤️', '💖', '✨', '🎉'][i % 4];
-        h.style.left = Math.random() * 100 + 'vw';
-        h.style.bottom = '-30px';
-        document.body.appendChild(h);
-        setTimeout(() => h.remove(), 3500);
-      }
-      const wish = wishes[Math.floor(Math.random() * wishes.length)];
-      const img = photoUrls.length ? '<img class="final-photo" src="' + photoUrls[Math.floor(Math.random() * photoUrls.length)] + '">' : '';
-      content.innerHTML = '<h1>YÊU CẦU ĐÃ ĐƯỢC GHI NHẬN! 📱</h1><p style="font-size:3.5rem">🎉🤣🥳</p>' + img + '<h2>' + wish + '</h2><p class="muted">Cảm ơn ông đã tham gia bài kiểm tra quan trọng này ❤️</p><button class="btn-funny primary" onclick="location.reload()">Chơi lại ↻</button>';
-    }
-
-    function sound() {
-      try {
-        const C = AudioContext || webkitAudioContext;
-        const c = new C();
-        const o = c.createOscillator();
-        const g = c.createGain();
-        o.type = 'sawtooth';
-        o.frequency.setValueAtTime(220, c.currentTime);
-        o.frequency.exponentialRampToValueAtTime(75, c.currentTime + 0.42);
-        g.gain.setValueAtTime(0.001, c.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.15, c.currentTime + 0.03);
-        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.55);
-        o.connect(g);
-        g.connect(c.destination);
-        o.start();
-        o.stop(c.currentTime + 0.56);
-      } catch (e) {}
-    }
-
+    const tempUrls = files.map(file => URL.createObjectURL(file));
+    photoUrls = [...photoUrls, ...tempUrls];
+    clearBtn.hidden = false;
+    ownerStatus.textContent = `Đã thêm ${files.length} ảnh thành công!`;
     renderGallery();
-  </script>
+    e.target.value = '';
+  });
+
+  clearBtn.onclick = () => {
+    photoUrls = [...DEFAULT_PHOTOS];
+    clearBtn.hidden = true;
+    ownerStatus.textContent = 'Đã xóa ảnh chọn tạm.';
+    renderGallery();
+  };
+
+  startBtn.onclick = () => {
+    content.innerHTML = '<h1>Những khoảnh khắc của tôi 📸</h1><p class="muted">Ảnh đang xuất hiện từ từ...</p><div class="grid" id="show"></div><p class="muted">Chạm vào màn hình để tiếp tục nhé 👆</p>';
+    const g = document.getElementById('show');
+    photoUrls.forEach((url, i) => {
+      const im = new Image();
+      im.src = url;
+      im.style.animationDelay = (i * 0.28) + 's';
+      g.appendChild(im);
+    });
+    content.onclick = () => {
+      content.onclick = null;
+      q1();
+    };
+  };
+
+  function dodge(btn) {
+    btn.addEventListener('pointerenter', () => move(btn));
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      move(btn);
+    });
+  }
+
+  function move(btn) {
+    btn.style.position = 'fixed';
+    btn.style.left = Math.random() * Math.max(20, innerWidth - 140) + 'px';
+    btn.style.top = Math.random() * Math.max(20, innerHeight - 80) + 'px';
+    btn.style.zIndex = 10;
+  }
+
+  function q1() {
+    content.innerHTML = '<div class="question">Câu 1: Tôi có đẹp trai không? 😎</div><div class="options"><button class="btn-funny primary" id="yes">Có ❤️</button><button class="btn-funny" id="no">Không 🙅</button></div>';
+    dodge(document.getElementById('no'));
+    document.getElementById('yes').onclick = () => {
+      sound();
+      content.innerHTML = '<h1>Tôi cũng biết tôi đẹp trai mà! 😎</h1><p style="font-size:4rem">🗿</p><p>*Âm thanh meme bruhhh* 💀</p><button class="btn-funny primary" id="next">Tiếp tục ➜</button>';
+      document.getElementById('next').onclick = q2;
+    };
+  }
+
+  function q2() {
+    content.innerHTML = '<div class="question">Câu 2: Ông có đẹp trai không? 😏</div><div class="options"><button class="btn-funny primary" id="yes">Có 😎</button><button class="btn-funny" id="no">Không</button></div>';
+    dodge(document.getElementById('no'));
+    document.getElementById('yes').onclick = () => {
+      content.innerHTML = '<h1>Tôi code sai đấy, ông chỉ đẹp trai sau tôi thôi! 🤣</h1><p style="font-size:4rem">👑</p><button class="btn-funny primary" id="next">Câu tiếp theo ➜</button>';
+      document.getElementById('next').onclick = q3;
+    };
+  }
+
+  function q3() {
+    content.innerHTML = '<div class="question">Câu 3: Ông sẽ mua gì tặng tôi? 🎁</div><button class="btn-funny choice primary" id="phone">📱 iPhone 18 Pro Max</button><button class="btn-funny choice" id="money">💸 Chuyển 300 triệu</button><button class="btn-funny choice" id="car">🚗 Xe VF3</button><button class="btn-funny choice" id="poop">💩 Tặng cái cục cứt</button><div class="note" id="note"></div>';
+    const note = document.getElementById('note');
+    ['money', 'car'].forEach(id => {
+      document.getElementById(id).onclick = () => {
+        note.textContent = 'Ông có tiền đâu mà chọn 😂';
+        document.getElementById(id).remove();
+      };
+    });
+    dodge(document.getElementById('poop'));
+    document.getElementById('phone').onclick = finale;
+  }
+
+  function finale() {
+    sound();
+    for (let i = 0; i < 24; i++) {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = ['❤️', '💖', '✨', '🎉'][i % 4];
+      h.style.left = Math.random() * 100 + 'vw';
+      h.style.bottom = '-30px';
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 3500);
+    }
+    const wish = wishes[Math.floor(Math.random() * wishes.length)];
+    const img = photoUrls.length ? '<img class="final-photo" src="' + photoUrls[Math.floor(Math.random() * photoUrls.length)] + '">' : '';
+    content.innerHTML = '<h1>YÊU CẦU ĐÃ ĐƯỢC GHI NHẬN! 📱</h1><p style="font-size:3.5rem">🎉🤣🥳</p>' + img + '<h2>' + wish + '</h2><p class="muted">Cảm ơn ông đã tham gia bài kiểm tra quan trọng này ❤️</p><button class="btn-funny primary" onclick="location.reload()">Chơi lại ↻</button>';
+  }
+
+  function sound() {
+    try {
+      const C = AudioContext || webkitAudioContext;
+      const c = new C();
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(220, c.currentTime);
+      o.frequency.exponentialRampToValueAtTime(75, c.currentTime + 0.42);
+      g.gain.setValueAtTime(0.001, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.15, c.currentTime + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.55);
+      o.connect(g);
+      g.connect(c.destination);
+      o.start();
+      o.stop(c.currentTime + 0.56);
+    } catch (e) {}
+  }
+
+  renderGallery();
+</script>
 </body>
 </html>
