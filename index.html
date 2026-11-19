@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ê ông ơi! ❤️</title>
-  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap.css">
   <style>
     * { box-sizing: border-box; }
     body {
@@ -36,11 +36,11 @@
     }
     .muted { color: #d9cce8; }
     .small { font-size: .9rem; }
-    .btn-funny, .upload-label {
+    .btn-funny {
       border: 0;
       border-radius: 999px;
-      padding: 14px 24px;
-      font-size: 1rem;
+      padding: 14px 28px;
+      font-size: 1.1rem;
       font-weight: 800;
       cursor: pointer;
       color: #28152f;
@@ -49,16 +49,12 @@
       transition: .18s;
       display: inline-block;
       text-decoration: none;
+      margin-top: 15px;
     }
-    .btn-funny:hover, .upload-label:hover {
+    .btn-funny:hover {
       transform: translateY(-2px);
       filter: brightness(1.08);
       color: #28152f;
-    }
-    .btn-funny:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-      transform: none;
     }
     .primary {
       background: linear-gradient(135deg, #ffb5d2, #ffdc91);
@@ -70,25 +66,40 @@
       flex-wrap: wrap;
       margin: 25px 0;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 12px;
-      margin: 25px auto;
-      max-width: 760px;
+    /* Giao diện xem từng ảnh khi bấm Bắt đầu */
+    .slider-container {
+      position: relative;
+      width: min(650px, 92vw);
+      height: 60vh;
+      max-height: 550px;
+      margin: 20px auto;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 12px 35px #0007;
+      background: #0000004d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: pan-y;
     }
-    .grid img {
-      width: 100%;
-      height: 170px;
-      object-fit: cover;
-      border-radius: 18px;
-      opacity: 0;
-      transform: translateY(18px);
-      animation: show .8s forwards;
-      box-shadow: 0 8px 24px #0005;
+    .slider-container img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 16px;
+      animation: fadeIn 0.4s ease;
     }
-    @keyframes show {
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .slider-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
     }
     .question {
       font-size: clamp(1.6rem, 5vw, 2.7rem);
@@ -115,7 +126,6 @@
       display: block;
       box-shadow: 0 10px 30px #0006;
     }
-    input[type=file] { display: none; }
     .heart {
       position: fixed;
       pointer-events: none;
@@ -126,26 +136,6 @@
     @keyframes float {
       to { transform: translateY(-110vh) rotate(30deg); opacity: 0; }
     }
-    .owner-box {
-      margin: 25px auto 18px;
-      padding: 16px;
-      border: 1px solid #ffffff35;
-      border-radius: 18px;
-      max-width: 540px;
-      background: #ffffff0b;
-    }
-    .owner-row {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    .status {
-      min-height: 24px;
-      color: #ffe5a8;
-      margin-top: 8px;
-    }
   </style>
 </head>
 <body>
@@ -153,22 +143,9 @@
   <main class="panel">
     <div id="content">
       <h1>Ê ông ơi! 💖</h1>
-      <p class="muted">Chào mừng đến với góc ảnh của tôi.</p>
-      <div id="gallery" class="grid"></div>
-      <p id="galleryStatus" class="small muted">Đang tải ảnh...</p>
-
-      <div class="owner-box">
-        <strong>📸 Chọn ảnh kỷ niệm (Chế độ Web Tĩnh)</strong>
-        <p class="small muted mb-2">Bạn có thể chọn ảnh từ máy để xem thử ngay, hoặc dùng danh sách mặc định trong code.</p>
-        <div class="owner-row">
-          <label class="upload-label primary" for="photos">📁 Chọn ảnh từ máy</label>
-          <input id="photos" type="file" accept="image/jpeg,image/png,image/gif,image/webp" multiple>
-          <button class="btn-funny" id="clearPhotos" hidden>🗑️ Xóa ảnh chọn tạm</button>
-        </div>
-        <div id="ownerStatus" class="status small"></div>
-      </div>
-
-      <button class="btn-funny primary" id="start" disabled>Bắt đầu ✨</button>
+      <p class="muted">Chào mừng đến với cái đéo gì tôi cũng không biết nữa thôi ấn bắt đầu đi</p>
+      <br>
+      <button class="btn-funny primary" id="start">Bắt đầu ✨</button>
     </div>
   </main>
 </div>
@@ -176,18 +153,13 @@
 <script src="js/bootstrap.bundle.min.js"></script>
 <script>
   const content = document.getElementById('content');
-  const gallery = document.getElementById('gallery');
-  const galleryStatus = document.getElementById('galleryStatus');
   const startBtn = document.getElementById('start');
-  const clearBtn = document.getElementById('clearPhotos');
-  const ownerStatus = document.getElementById('ownerStatus');
 
   // Danh sách ảnh mặc định từ thư mục images của bạn
   const DEFAULT_PHOTOS = [
     "images/DSC_0107.jpeg",
     "images/DSC_0113.jpeg",
     "images/DSC_0313.jpeg",
-    "images/F162C6D0-818F-433E-BA9C-4F3C4D961E74.png",
     "images/IMG_0476.JPG",
     "images/IMG_0608.jpg",
     "images/IMG_0614.jpg",
@@ -206,59 +178,69 @@
     "Chúc ông ngày càng đẹp trai, giàu có, hạnh phúc — nhớ giữ lời hứa chiếc iPhone nhé! 📱"
   ];
 
-  function renderGallery() {
-    gallery.innerHTML = '';
-    photoUrls.forEach((url, i) => {
-      const im = new Image();
-      im.src = url;
-      im.alt = 'Ảnh kỷ niệm';
-      im.style.animationDelay = (i * 0.18) + 's';
-      im.onerror = () => { im.style.display = 'none'; };
-      gallery.appendChild(im);
-    });
-
-    if (photoUrls.length > 0) {
-      galleryStatus.textContent = `Có ${photoUrls.length} tấm ảnh đang chờ ông khám phá ❤️`;
-      startBtn.disabled = false;
-    } else {
-      galleryStatus.textContent = 'Chưa có ảnh nào. Hãy nhấn "Chọn ảnh từ máy" bên dưới để thêm ảnh chơi ngay nhé!';
-      startBtn.disabled = true;
-    }
-  }
-
-  // Xử lý khi người dùng chọn ảnh trực tiếp từ máy
-  document.getElementById('photos').addEventListener('change', (e) => {
-    const files = [...e.target.files];
-    if (!files.length) return;
-
-    const tempUrls = files.map(file => URL.createObjectURL(file));
-    photoUrls = [...photoUrls, ...tempUrls];
-    clearBtn.hidden = false;
-    ownerStatus.textContent = `Đã thêm ${files.length} ảnh thành công!`;
-    renderGallery();
-    e.target.value = '';
-  });
-
-  clearBtn.onclick = () => {
-    photoUrls = [...DEFAULT_PHOTOS];
-    clearBtn.hidden = true;
-    ownerStatus.textContent = 'Đã xóa ảnh chọn tạm.';
-    renderGallery();
-  };
-
+  // Khi bấm Bắt đầu: Chuyển thẳng sang chế độ xem từng ảnh có hỗ trợ vuốt tay & nút chuyển
   startBtn.onclick = () => {
-    content.innerHTML = '<h1>Những khoảnh khắc của tôi 📸</h1><p class="muted">Ảnh đang xuất hiện từ từ...</p><div class="grid" id="show"></div><p class="muted">Chạm vào màn hình để tiếp tục nhé 👆</p>';
-    const g = document.getElementById('show');
-    photoUrls.forEach((url, i) => {
-      const im = new Image();
-      im.src = url;
-      im.style.animationDelay = (i * 0.28) + 's';
-      g.appendChild(im);
-    });
-    content.onclick = () => {
-      content.onclick = null;
-      q1();
-    };
+    let currentIndex = 0;
+
+    function updateSliderView() {
+      content.innerHTML = `
+          <h1>Kỷ niệm của chúng ta 📸</h1>
+          <p class="muted">Vuốt sang trái/phải hoặc bấm nút để xem ảnh (${currentIndex + 1}/${photoUrls.length})</p>
+          <div class="slider-container" id="sliderBox">
+            <img src="${photoUrls[currentIndex]}" alt="Ảnh kỷ niệm">
+          </div>
+          <div class="slider-nav">
+            <button class="btn-funny" id="prevBtn">❮ Trước</button>
+            <button class="btn-funny primary" id="nextSlideBtn">Tiếp ➔</button>
+          </div>
+        `;
+
+      // Gắn sự kiện nút bấm
+      document.getElementById('prevBtn').onclick = () => {
+        currentIndex = (currentIndex - 1 + photoUrls.length) % photoUrls.length;
+        updateSliderView();
+      };
+
+      document.getElementById('nextSlideBtn').onclick = () => {
+        currentIndex++;
+        if (currentIndex >= photoUrls.length) {
+          q1(); // Hết ảnh thì chuyển sang câu hỏi trắc nghiệm
+        } else {
+          updateSliderView();
+        }
+      };
+
+      // Hỗ trợ vuốt tay trên điện thoại / cảm ứng (Swipe gesture)
+      const sliderBox = document.getElementById('sliderBox');
+      let startX = 0;
+
+      sliderBox.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+      });
+
+      sliderBox.addEventListener('touchend', (e) => {
+        let endX = e.changedTouches[0].clientX;
+        let diff = startX - endX;
+
+        if (Math.abs(diff) > 50) { // Ngưỡng vuốt tối thiểu
+          if (diff > 0) {
+            // Vuốt sang trái -> Xem ảnh tiếp theo
+            currentIndex++;
+            if (currentIndex >= photoUrls.length) {
+              q1();
+            } else {
+              updateSliderView();
+            }
+          } else {
+            // Vuốt sang phải -> Quay lại ảnh trước
+            currentIndex = (currentIndex - 1 + photoUrls.length) % photoUrls.length;
+            updateSliderView();
+          }
+        }
+      });
+    }
+
+    updateSliderView();
   };
 
   function dodge(btn) {
@@ -342,8 +324,6 @@
       o.stop(c.currentTime + 0.56);
     } catch (e) {}
   }
-
-  renderGallery();
 </script>
 </body>
 </html>
